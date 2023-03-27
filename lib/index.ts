@@ -6,7 +6,7 @@ import { PostgresTodoRepository } from "./todo-management/todo.repository";
 
 const httpServer = createServer();
 
-const sequelize = new Sequelize(process.env.PGDATABASE || "postgres", process.env.PGUSER || "postgres", process.env.PGPASSWORD || "changeit", {
+const sequelize = new Sequelize(process.env.DATABASE_URL || "postgres://postgres:changeit@localhost:5432/postgres", {
   dialect: "postgres",
 });
 
