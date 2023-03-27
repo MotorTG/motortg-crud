@@ -1,0 +1,29 @@
+{
+  "name": "motortg-crud",
+  "version": "0.0.1",
+  "description": "Server for the Basic CRUD Socket.IO example (with Postgres and multiple Socket.IO servers)",
+  "main": "lib/cluster.ts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node lib/cluster.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Marocco2/motortg-crud.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Marocco2/motortg-crud/issues"
+  },
+  "dependencies": {
+    "@socket.io/postgres-adapter": "^0.2.0",
+    "@socket.io/sticky": "^1.0.1",
+    "joi": "^17.4.0",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.18.0",
+    "socket.io": "^4.0.1",
+    "uuid": "^8.3.2"
+  }
+}
