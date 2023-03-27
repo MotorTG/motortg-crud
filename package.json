@@ -30,6 +30,5 @@
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.20.0",
     "utf-8-validate": "^5.0.10",
     "uuid": "^9.0.0"
-  },
-  "packageManager": "yarn@3.5.0"
+  }
 }
