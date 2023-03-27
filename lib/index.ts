@@ -26,7 +26,7 @@ createApplication(
   },
   {
     cors: {
-      origin: [process.env.CORS_URL || "http://localhost:4200"],
+      origin: [process.env.EXTERNAL_URL || "http://localhost:4200"],
     },
   }
 );
@@ -45,7 +45,7 @@ const main = async () => {
   `);
 
   // uncomment when running in standalone mode
-  // httpServer.listen(process.env.PORT || 3000);
+  httpServer.listen(process.env.PORT || 3000);
 };
 
 main();
