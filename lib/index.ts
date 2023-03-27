@@ -6,7 +6,7 @@ import { PostgresTodoRepository } from "./todo-management/todo.repository";
 
 const httpServer = createServer();
 
-const sequelize = new Sequelize("postgres", "postgres", "changeit", {
+const sequelize = new Sequelize(process.env.PGDATABASE || "postgres", process.env.PGUSER || "postgres", process.env.PGPASSWORD || "changeit", {
   dialect: "postgres",
 });
 
@@ -45,7 +45,7 @@ const main = async () => {
   `);
 
   // uncomment when running in standalone mode
-  // httpServer.listen(3000);
+  httpServer.listen(process.env.PORT || 3000);
 };
 
 main();
