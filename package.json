@@ -2,10 +2,10 @@
   "name": "motortg-crud",
   "version": "0.0.1",
   "description": "Server for the Basic CRUD Socket.IO example (with Postgres and multiple Socket.IO servers)",
-  "main": "dist/lib/cluster.js",
+  "main": "dist/cluster.js",
   "private": true,
   "scripts": {
-    "start": "ts-node lib/cluster.ts",
+    "start": "node dist/cluster.js",
     "build": "tsc"
   },
   "repository": {
