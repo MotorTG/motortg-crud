@@ -3,6 +3,7 @@ dist/
 
 # client
 client/
+server/
 
 # dependencies
 node_modules/
@@ -26,3 +27,12 @@ pnpm-debug.log*
 .netlify
 
 *.code-workspace
+
+# yarn
+.yarn/*
+#!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

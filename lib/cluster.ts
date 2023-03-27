@@ -3,7 +3,7 @@ import { createServer } from "http";
 import { setupMaster } from "@socket.io/sticky";
 import { cpus } from "os";
 
-if (cluster.isMaster) {
+if (cluster.isPrimary) {
   console.log(`Master ${process.pid} is running`);
   const httpServer = createServer();
 
@@ -11,9 +11,9 @@ if (cluster.isMaster) {
     loadBalancingMethod: "least-connection",
   });
 
-  httpServer.listen(3000);
+  httpServer.listen(process.env.PORT || 3000);
 
-  for (let i = 0; i < cpus().length; i++) {
+  for (let i = 0; i < 1; i++) {
     cluster.fork();
   }
 
