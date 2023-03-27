@@ -13,6 +13,7 @@ export class TodoRepository extends CrudRepository {}
 class Todo extends Model {}
 
 export class PostgresTodoRepository extends TodoRepository {
+  [x: string]: any;
   constructor(sequelize) {
     super();
     this.sequelize = sequelize;

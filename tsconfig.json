@@ -3,7 +3,8 @@
       "outDir": "./dist",
       "module": "commonjs",
       "target": "es2017",
-      "strict": true
+      "esModuleInterop": true,
+      "strict": false
     },
     "include": [
       "./lib/**/*"
