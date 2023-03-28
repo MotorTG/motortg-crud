@@ -16,6 +16,7 @@ const connectionPool = new pg.Pool({
   database: process.env.PGDATABASE,
   password: process.env.PGPASSWORD,
   port: Number(process.env.PGPORT),
+  ssl: process.env.PGSSLROOTCERT,
 });
 
 createApplication(
