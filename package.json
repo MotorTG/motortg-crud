@@ -28,7 +28,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2",
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.20.0",
-    "utf-8-validate": "^5.0.10",
+    "utf-8-validate": "^6.0.3",
     "uuid": "^9.0.0"
   }
 }
