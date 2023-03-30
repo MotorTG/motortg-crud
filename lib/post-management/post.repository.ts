@@ -8,46 +8,66 @@ class CrudRepository {
   deleteById(id: any) {}
 }
 
-export class TodoRepository extends CrudRepository {}
+export class PostRepository extends CrudRepository {}
 
-class Todo extends Model {}
+class Post extends Model {}
 
-export class PostgresTodoRepository extends TodoRepository {
+export class PostgresPostRepository extends PostRepository {
   sequelize: Sequelize;
   constructor(sequelize: Sequelize) {
     super();
     this.sequelize = sequelize;
 
-    Todo.init(
+    Post.init(
       {
-        id: {
-          type: DataTypes.STRING,
+        message_id: {
+          type: DataTypes.INTEGER,
           primaryKey: true,
           allowNull: false,
         },
-        title: {
-          type: DataTypes.STRING,
+        date: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
         },
-        completed: {
-          type: DataTypes.BOOLEAN,
+        chat: {
+          type: DataTypes.JSONB,
+          allowNull: false,
+        },
+        text: {
+          type: DataTypes.TEXT,
+        },
+        caption: {
+          type: DataTypes.TEXT,
+        },
+        entities: {
+          type: DataTypes.ARRAY(DataTypes.JSONB),
+        },
+        caption_entities: {
+          type: DataTypes.ARRAY(DataTypes.JSONB),
+        },
+        photo: {
+          type: DataTypes.ARRAY(DataTypes.JSONB),
+        },
+        video: {
+          type: DataTypes.JSONB,
         },
       },
       {
         sequelize,
-        tableName: "todos",
+        tableName: "posts",
       }
     );
   }
 
   findAll() {
     return this.sequelize.transaction((transaction: any) => {
-      return Todo.findAll({ transaction });
+      return Post.findAll({ transaction });
     });
   }
 
   async findById(id: Identifier) {
     return this.sequelize.transaction(async (transaction: any) => {
-      const todo = await Todo.findByPk(id, { transaction });
+      const todo = await Post.findByPk(id, { transaction });
 
       if (!todo) {
         throw Errors.ENTITY_NOT_FOUND;
@@ -59,13 +79,13 @@ export class PostgresTodoRepository extends TodoRepository {
 
   save(entity: Optional<any, string>) {
     return this.sequelize.transaction((transaction: any) => {
-      return Todo.upsert(entity, { transaction });
+      return Post.upsert(entity, { transaction });
     });
   }
 
   async deleteById(id: any) {
     return this.sequelize.transaction(async (transaction: any) => {
-      const count = await Todo.destroy({ where: { id }, transaction });
+      const count = await Post.destroy({ where: { id }, transaction });
 
       if (count === 0) {
         throw Errors.ENTITY_NOT_FOUND;

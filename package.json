@@ -2,10 +2,11 @@
   "name": "motortg-crud",
   "version": "0.0.1",
   "description": "Server for the Basic CRUD Socket.IO example (with Postgres and multiple Socket.IO servers)",
-  "main": "dist/cluster.js",
+  "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "start": "node dist/cluster.js",
+    "start": "node dist/index.js",
+    "dev": "ts-node lib/index",
     "build": "tsc"
   },
   "repository": {
@@ -18,7 +19,6 @@
   },
   "dependencies": {
     "@socket.io/postgres-adapter": "^0.3.1",
-    "@socket.io/sticky": "^1.0.3",
     "bufferutil": "^4.0.7",
     "joi": "^17.9.1",
     "pg": "^8.10.0",

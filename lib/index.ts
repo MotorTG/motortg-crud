@@ -1,38 +1,33 @@
-import { createServer } from "http";
+// import { createServer } from "http";
 import { createApplication } from "./app";
 import { Sequelize } from "sequelize";
 import fs from "fs"
 import pg from "pg";
-import { PostgresTodoRepository } from "./todo-management/todo.repository";
+import { PostgresPostRepository } from "./post-management/post.repository";
 
-const httpServer = createServer();
+//const httpServer = createServer();
 
 const sequelize = new Sequelize(process.env.DATABASE_URL || "postgres://postgres:changeit@localhost:5432/postgres", {
   dialect: "postgres",
 });
 
 const connectionPool = new pg.Pool({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  password: process.env.PGPASSWORD,
+  user: process.env.PGUSER || "postgres",
+  host: process.env.PGHOST || "localhost",
+  database: process.env.PGDATABASE || "postgres",
+  password: process.env.PGPASSWORD || "changeit",
   port: Number(process.env.PGPORT),
   ssl: {
-    ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString()
+    ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString() || null
    },
 });
 
 createApplication(
-  httpServer,
+  //httpServer,
   {
     connectionPool,
-    todoRepository: new PostgresTodoRepository(sequelize),
+    postRepository: new PostgresPostRepository(sequelize),
   },
-  {
-    cors: {
-      origin: [/*process.env.EXTERNAL_URL ||*/ "http://localhost:4200"],
-    },
-  }
 );
 
 const main = async () => {

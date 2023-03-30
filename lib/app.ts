@@ -1,30 +1,37 @@
 import { App } from "uWebSockets.js";
 import { Server } from "socket.io";
-import createTodoHandlers from "./todo-management/todo.handlers";
-import { setupWorker } from "@socket.io/sticky";
+import createPostHandlers from "./post-management/post.handlers";
 import { createAdapter } from "@socket.io/postgres-adapter";
 
-export function createApplication(httpServer, components, serverOptions = {}) {
-  //const app = App();
-  const io = new Server(httpServer, serverOptions);
+export function createApplication(components) {
+  const app = App();
+  const io = new Server();
 
-  //io.attachApp(app)
+  io.attachApp(app)
 
-  const { createTodo, readTodo, updateTodo, deleteTodo, listTodo } =
-    createTodoHandlers(components);
+  const { createPost, readPost, updatePost, deletePost, listPost } =
+    createPostHandlers(components);
 
   io.on("connection", (socket) => {
-    socket.on("todo:create", createTodo);
-    socket.on("todo:read", readTodo);
-    socket.on("todo:update", updateTodo);
-    socket.on("todo:delete", deleteTodo);
-    socket.on("todo:list", listTodo);
+    socket.on("post:read", readPost);
+    socket.on("post:update", updatePost);
+    socket.on("post:delete", deletePost);
+    socket.on("post:list", listPost);
   });
 
-  // enable sticky session in the cluster (to remove in standalone mode)
-  setupWorker(io);
+  io.of("/create").on("connection", (socket) => {
+    socket.on("post:create", createPost);
+  });
 
   io.adapter(createAdapter(components.connectionPool));
+
+  app.listen(Number(process.env.PORT) || 3000, (token) => {
+    if (!token) {
+      console.warn("port already in use");
+    } else {
+      console.log('open for business!! :rocket:');
+    }
+  });
 
   return io;
 }

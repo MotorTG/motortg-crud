@@ -5,7 +5,7 @@ Implementazione di un server CRUD per MotorTG.it
 |----------------|-------------------------------------------------------------------------------------------|
 | Language       | TypeScript                                                                          |
 | Database       | Postgres, with the [Postgres adapter](https://socket.io/docs/v4/postgres-adapter/)        |
-| Cluster?       | Yes, with the [`@socket.io/sticky`](https://github.com/socketio/socket.io-sticky) module) |
+| Cluster?       | Not needed |
 
 ## Usage
 
