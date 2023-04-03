@@ -14,13 +14,13 @@ export function createApplication(components) {
 
   io.on("connection", (socket) => {
     socket.on("post:read", readPost);
-    socket.on("post:update", updatePost);
-    socket.on("post:delete", deletePost);
     socket.on("post:list", listPost);
   });
 
-  io.of("/create").on("connection", (socket) => {
+  io.of("/post").on("connection", (socket) => {
     socket.on("post:create", createPost);
+    socket.on("post:delete", deletePost);
+    socket.on("post:update", updatePost);
   });
 
   io.adapter(createAdapter(components.connectionPool));

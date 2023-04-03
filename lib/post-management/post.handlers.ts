@@ -40,7 +40,7 @@ const idSchema = Joi.number()
 
 const postSchema = Joi.object({
   message_id: idSchema.alter({
-    create: (schema) => schema.forbidden(),
+    create: (schema) => schema.required(),
     update: (schema) => schema.required(),
   }),
   date: Joi.number().required(),
@@ -118,13 +118,13 @@ export default function (components) {
       });
 
       if (error) {
-        return callback({
+        const errorMsg ={
           error: Errors.INVALID_PAYLOAD,
           errorDetails: mapErrorDetails(error.details),
-        });
+        }
+        console.error(errorMsg)
+        return callback(errorMsg);
       }
-
-      value.id = uuid();
 
       // persist the entity
       try {
@@ -137,7 +137,7 @@ export default function (components) {
 
       // acknowledge the creation
       callback({
-        data: value.id,
+        data: value.message_id,
       });
 
       // notify the other users

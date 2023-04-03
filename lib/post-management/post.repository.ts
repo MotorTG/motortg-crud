@@ -67,13 +67,13 @@ export class PostgresPostRepository extends PostRepository {
 
   async findById(id: Identifier) {
     return this.sequelize.transaction(async (transaction: any) => {
-      const todo = await Post.findByPk(id, { transaction });
+      const post = await Post.findByPk(id, { transaction });
 
-      if (!todo) {
+      if (!post) {
         throw Errors.ENTITY_NOT_FOUND;
       }
 
-      return todo;
+      return post;
     });
   }
 
