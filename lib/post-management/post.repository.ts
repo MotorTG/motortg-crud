@@ -1,16 +1,16 @@
 import { Errors } from "../util";
 import { Model, DataTypes, Sequelize, Identifier, Optional } from "sequelize";
 
-class CrudRepository {
-  findAll() {}
-  findById(id: any) {}
-  save(entity: any) {}
-  deleteById(id: any) {}
+abstract class CrudRepository<P, ID> {
+  abstract findAll(): Promise<P[]>;
+  abstract findById(id: ID): Promise<P>;
+  abstract save(entity: Omit<P,"id">): Promise<[Post, boolean]>;
+  abstract deleteById(id: ID): Promise<void>;
 }
 
-export class PostRepository extends CrudRepository {}
+export class Post extends Model {}
 
-class Post extends Model {}
+export abstract class PostRepository extends CrudRepository<Post, Identifier> {}
 
 export class PostgresPostRepository extends PostRepository {
   sequelize: Sequelize;
@@ -59,7 +59,7 @@ export class PostgresPostRepository extends PostRepository {
     );
   }
 
-  findAll() {
+  findAll(): Promise<Post[]> {
     return this.sequelize.transaction((transaction: any) => {
       return Post.findAll({ transaction });
     });
@@ -77,13 +77,13 @@ export class PostgresPostRepository extends PostRepository {
     });
   }
 
-  save(entity: Optional<any, string>) {
+  save(entity): Promise<[Post, boolean]> {
     return this.sequelize.transaction((transaction: any) => {
       return Post.upsert(entity, { transaction });
     });
   }
 
-  async deleteById(id: any) {
+  async deleteById(id: Identifier): Promise<void> {
     return this.sequelize.transaction(async (transaction: any) => {
       const count = await Post.destroy({ where: { id }, transaction });
 

@@ -1,11 +1,13 @@
-export const Errors = {
-  ENTITY_NOT_FOUND: "entity not found",
-  INVALID_PAYLOAD: "invalid payload",
-};
+import { ValidationErrorItem } from "joi";
 
-const errorValues = Object.values(Errors);
+export enum Errors {
+  ENTITY_NOT_FOUND = "entity not found",
+  INVALID_PAYLOAD = "invalid payload",
+}
 
-export function sanitizeErrorMessage(message) {
+const errorValues: string[] = Object.values(Errors);
+
+export function sanitizeErrorMessage(message: any) {
   if (typeof message === "string" && errorValues.includes(message)) {
     return message;
   } else {
@@ -13,7 +15,7 @@ export function sanitizeErrorMessage(message) {
   }
 }
 
-export function mapErrorDetails(details) {
+export function mapErrorDetails(details: ValidationErrorItem[]) {
   return details.map((item) => ({
     message: item.message,
     path: item.path,

@@ -1,6 +1,9 @@
 import { Errors, mapErrorDetails, sanitizeErrorMessage } from "../util";
-import { v4 as uuid } from "uuid";
 import Joi from "joi";
+import { Components } from "../app";
+import { Identifier } from "sequelize";
+import { Post } from "./post.repository";
+import { Response } from "../events";
 
 // {
 //   message_id: {
@@ -105,11 +108,16 @@ const postSchema = Joi.object({
   }),
 });
 
-export default function (components) {
+export default function (components: Components) {
   const { postRepository } = components;
   return {
-    createPost: async function (payload, callback) {
-      const socket = this;
+    createPost: async function (
+      payload: Omit<Post, "id">,
+      callback: (res: Response<Identifier>) => void
+      ) {
+      
+      // @ts-ignore
+      const socket: Socket<ClientEvents, ServerEvents> = this;
 
       // validate the payload
       const { error, value } = postSchema.tailor("create").validate(payload, {
@@ -144,7 +152,10 @@ export default function (components) {
       socket.broadcast.emit("post:created", value);
     },
 
-    readPost: async function (id, callback) {
+    readPost: async function (
+      id: Identifier,
+      callback: (res: Response<Post>) => void
+    ) {
       const { error } = idSchema.validate(id);
 
       if (error) {
@@ -165,8 +176,13 @@ export default function (components) {
       }
     },
 
-    updatePost: async function (payload, callback) {
-      const socket = this;
+    updatePost: async function (
+      payload: Post,
+      callback: (res?: Response<void>) => void
+    ) {
+
+      // @ts-ignore
+      const socket: Socket<ClientEvents, ServerEvents> = this;
 
       const { error, value } = postSchema.tailor("update").validate(payload, {
         abortEarly: false,
@@ -192,8 +208,12 @@ export default function (components) {
       socket.broadcast.emit("post:updated", value);
     },
 
-    deletePost: async function (id, callback) {
-      const socket = this;
+    deletePost: async function (
+      id: Identifier,
+      callback: (res?: Response<void>) => void
+    ) {
+      // @ts-ignore
+      const socket: Socket<ClientEvents, ServerEvents> = this;
 
       const { error } = idSchema.validate(id);
 
@@ -215,7 +235,7 @@ export default function (components) {
       socket.broadcast.emit("post:deleted", id);
     },
 
-    listPost: async function (callback) {
+    listPost: async function (callback: (res: Response<Post[]>) => void) {
       try {
         callback({
           data: await postRepository.findAll(),
