@@ -26,9 +26,15 @@ export function createApplication(components: Components): Server<ClientEvents, 
   });
 
   io.of("/post").on("connection", (socket) => {
-    socket.on("post:create", createPost);
-    socket.on("post:delete", deletePost);
-    socket.on("post:update", updatePost);
+    socket.on("post:create", (payload, callback) => {
+      callback(createPost(payload));
+    });
+    socket.on("post:delete", (payload, callback) => {
+      callback(deletePost(payload));
+    });
+    socket.on("post:update", (payload, callback) => {
+      callback(updatePost(payload));
+    });
   });
 
   io.adapter(createAdapter(components.connectionPool));

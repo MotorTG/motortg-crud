@@ -23,14 +23,16 @@ export interface ClientEvents {
   "post:list": (callback: (res: Response<Post[]>) => void) => void;
 
   "post:create": (
-    payload: Omit<Post, "id">
-  ) => Promise<any>;
+    payload: Omit<Post, "id">,
+    callback: (res: Promise<Response<void>>) => void
+  ) => void;
 
   "post:read": (id: Identifier, callback: (res: Response<Post>) => void) => void;
 
   "post:update": (
-    payload: Post
-  ) => Promise<Response<void>>;
+    payload: Post,
+    callback: (res?: Promise<Response<void>>) => void
+  ) => void;
 
-  "post:delete": (id: Identifier) => Promise<Response<void>>;
+  "post:delete": (id: Identifier, callback: (res?: Promise<Response<void>>) => void) => void;
 }
