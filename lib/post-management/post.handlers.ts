@@ -112,10 +112,9 @@ export default function (components: Components) {
   const { postRepository } = components;
   return {
     createPost: async function (
-      payload: Omit<Post, "id">,
-      callback: (res: Response<Identifier>) => void
+      payload: Omit<Post, "id">
       ) {
-      
+
       // @ts-ignore
       const socket: Socket<ClientEvents, ServerEvents> = this;
 
@@ -131,25 +130,23 @@ export default function (components: Components) {
           errorDetails: mapErrorDetails(error.details),
         }
         console.error(errorMsg)
-        return callback(errorMsg);
+        return errorMsg;
       }
 
       // persist the entity
       try {
         await postRepository.save(value);
       } catch (e) {
-        return callback({
+        return {
           error: sanitizeErrorMessage(e),
-        });
+        };
       }
-
-      // acknowledge the creation
-      callback({
-        data: value.message_id,
-      });
 
       // notify the other users
       socket.broadcast.emit("post:created", value);
+
+      // acknowledge the creation
+      return Promise.resolve(value.message_id);
     },
 
     readPost: async function (
@@ -177,8 +174,7 @@ export default function (components: Components) {
     },
 
     updatePost: async function (
-      payload: Post,
-      callback: (res?: Response<void>) => void
+      payload: Post
     ) {
 
       // @ts-ignore
@@ -190,27 +186,26 @@ export default function (components: Components) {
       });
 
       if (error) {
-        return callback({
+        return {
           error: Errors.INVALID_PAYLOAD,
           errorDetails: mapErrorDetails(error.details),
-        });
+        };
       }
 
       try {
         await postRepository.save(value);
       } catch (e) {
-        return callback({
+        return {
           error: sanitizeErrorMessage(e),
-        });
+        };
       }
 
-      callback();
       socket.broadcast.emit("post:updated", value);
+      return
     },
 
     deletePost: async function (
-      id: Identifier,
-      callback: (res?: Response<void>) => void
+      id: Identifier
     ) {
       // @ts-ignore
       const socket: Socket<ClientEvents, ServerEvents> = this;
@@ -218,21 +213,21 @@ export default function (components: Components) {
       const { error } = idSchema.validate(id);
 
       if (error) {
-        return callback({
+        return {
           error: Errors.ENTITY_NOT_FOUND,
-        });
+        };
       }
 
       try {
         await postRepository.deleteById(id);
       } catch (e) {
-        return callback({
+        return {
           error: sanitizeErrorMessage(e),
-        });
+        };
       }
 
-      callback();
       socket.broadcast.emit("post:deleted", id);
+      return
     },
 
     listPost: async function (callback: (res: Response<Post[]>) => void) {
