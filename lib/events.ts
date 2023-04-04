@@ -11,7 +11,7 @@ interface Success<P> {
   data: P;
 }
 
-export type Response<P> = Error | Success<P>;
+export type Response<P> = Error | Success<P> | Post | Identifier;
 
 export interface ServerEvents {
   "post:created": (post: Post) => void;
@@ -24,15 +24,15 @@ export interface ClientEvents {
 
   "post:create": (
     payload: Omit<Post, "id">,
-    callback: (res: Promise<Response<void>>) => void
+    callback: (res: Promise<Response<Post>>) => void
   ) => void;
 
   "post:read": (id: Identifier, callback: (res: Response<Post>) => void) => void;
 
   "post:update": (
     payload: Post,
-    callback: (res?: Promise<Response<void>>) => void
+    callback: (res?: Promise<Response<Post>>) => void
   ) => void;
 
-  "post:delete": (id: Identifier, callback: (res?: Promise<Response<void>>) => void) => void;
+  "post:delete": (id: Identifier, callback: (res?: Promise<Response<Identifier>>) => void) => void;
 }

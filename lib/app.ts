@@ -26,14 +26,14 @@ export function createApplication(components: Components): Server<ClientEvents, 
   });
 
   io.of("/post").on("connection", (socket) => {
-    socket.on("post:create", (payload, callback) => {
-      callback(createPost(payload));
+    socket.on("post:create", async (payload, callback) => {
+      callback(await createPost(socket, payload));
     });
     socket.on("post:delete", (payload, callback) => {
-      callback(deletePost(payload));
+      callback(deletePost(socket, payload));
     });
-    socket.on("post:update", (payload, callback) => {
-      callback(updatePost(payload));
+    socket.on("post:update", async (payload, callback) => {
+      callback(await updatePost(socket, payload));
     });
   });
 

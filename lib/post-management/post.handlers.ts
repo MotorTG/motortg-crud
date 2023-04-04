@@ -4,6 +4,9 @@ import { Components } from "../app";
 import { Identifier } from "sequelize";
 import { Post } from "./post.repository";
 import { Response } from "../events";
+import { Socket } from "socket.io";
+import { ClientEvents, ServerEvents } from "../events";
+
 
 // {
 //   message_id: {
@@ -112,12 +115,9 @@ export default function (components: Components) {
   const { postRepository } = components;
   return {
     createPost: async function (
-      payload: Omit<Post, "id">
+      socket: Socket<ClientEvents, ServerEvents>,
+      payload: Post
       ) {
-
-      // @ts-ignore
-      const socket: Socket<ClientEvents, ServerEvents> = this;
-
       // validate the payload
       const { error, value } = postSchema.tailor("create").validate(payload, {
         abortEarly: false,
@@ -146,7 +146,7 @@ export default function (components: Components) {
       socket.broadcast.emit("post:created", value);
 
       // acknowledge the creation
-      return Promise.resolve(value.message_id);
+      return await value;
     },
 
     readPost: async function (
@@ -174,11 +174,9 @@ export default function (components: Components) {
     },
 
     updatePost: async function (
+      socket: Socket<ClientEvents, ServerEvents>,
       payload: Post
     ) {
-
-      // @ts-ignore
-      const socket: Socket<ClientEvents, ServerEvents> = this;
 
       const { error, value } = postSchema.tailor("update").validate(payload, {
         abortEarly: false,
@@ -201,14 +199,13 @@ export default function (components: Components) {
       }
 
       socket.broadcast.emit("post:updated", value);
-      return
+      return await value;
     },
 
     deletePost: async function (
+      socket: Socket<ClientEvents, ServerEvents>,
       id: Identifier
     ) {
-      // @ts-ignore
-      const socket: Socket<ClientEvents, ServerEvents> = this;
 
       const { error } = idSchema.validate(id);
 
@@ -227,7 +224,7 @@ export default function (components: Components) {
       }
 
       socket.broadcast.emit("post:deleted", id);
-      return
+      return id;
     },
 
     listPost: async function (callback: (res: Response<Post[]>) => void) {
