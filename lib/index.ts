@@ -17,9 +17,9 @@ const connectionPool = new pg.Pool({
   database: process.env.PGDATABASE || "postgres",
   password: process.env.PGPASSWORD || "changeit",
   port: Number(process.env.PGPORT),
-  // ssl: {
-  //   ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString()
-  //  },
+  ssl: {
+    ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString()
+   },
 });
 
 createApplication(
