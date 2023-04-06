@@ -5,6 +5,7 @@ import createPostHandlers from "./post-management/post.handlers";
 import { PostRepository } from "./post-management/post.repository";
 import pg from "pg";
 import { createAdapter } from "@socket.io/postgres-adapter";
+import * as jose from 'jose'
 
 export interface Components {
   connectionPool: pg.Pool;
@@ -23,6 +24,34 @@ export function createApplication(components: Components): Server<ClientEvents, 
   io.on("connection", (socket) => {
     socket.on("post:read", readPost);
     socket.on("post:list", listPost);
+  });
+
+  io.of("/post").use(async (socket, next) => {
+    console.log("Connection transport: ", socket.conn.transport.name); // in most cases, prints "polling"
+    console.log("Host: ", socket.handshake.headers.host); // ip address of client
+    //next();
+    const { token } = socket.handshake.auth
+    console.log("token: ", token)
+    // console.log(new TextDecoder().decode(jose.base64url.decode(process.env.PUBLIC_KEY)))
+    try {
+      const { payload, protectedHeader } = await jose.compactVerify(
+        token,
+        await jose.importSPKI(
+          // @ts-ignore
+          new TextDecoder().decode(jose.base64url.decode(process.env.PUBLIC_KEY)),
+          "ES256"
+        ));
+      if (new TextDecoder().decode(payload) === `Token verification`) {
+        next();
+      } else {
+        console.log("Payload: ", new TextDecoder().decode(payload))
+        next(new Error("invalid payload"));
+      }
+    } catch (e) {
+      console.error(e)
+      next(new Error(e));
+    }
+
   });
 
   io.of("/post").on("connection", (socket) => {

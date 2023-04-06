@@ -4,6 +4,7 @@ import { Sequelize } from "sequelize";
 import fs from "fs"
 import pg from "pg";
 import { PostgresPostRepository } from "./post-management/post.repository";
+// import * as jose from 'jose'
 
 //const httpServer = createServer();
 
@@ -17,9 +18,8 @@ const connectionPool = new pg.Pool({
   database: process.env.PGDATABASE || "postgres",
   password: process.env.PGPASSWORD || "changeit",
   port: Number(process.env.PGPORT),
-  ssl: {
-    ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString()
-   },
+  // @ts-ignore
+  ssl: { ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString() },
 });
 
 createApplication(
@@ -42,6 +42,11 @@ const main = async () => {
         payload     bytea
     );
   `);
+
+  // uncomment if you want generate a pair of keys in base64
+  // const { publicKey, privateKey } = await jose.generateKeyPair('ES256')
+  // console.log(jose.base64url.encode(await jose.exportSPKI(publicKey)))
+  // console.log(jose.base64url.encode(await jose.exportPKCS8(privateKey)))
 
   // uncomment when running in standalone mode
   // httpServer.listen(process.env.PORT || 3000);
