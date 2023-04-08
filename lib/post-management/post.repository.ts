@@ -12,6 +12,8 @@ export class Post extends Model {}
 
 export abstract class PostRepository extends CrudRepository<Post, Identifier> {}
 
+// Server-to-database interface
+// Used to pass objects into the database with the connection estabilished earlier
 export class PostgresPostRepository extends PostRepository {
   sequelize: Sequelize;
   constructor(sequelize: Sequelize) {

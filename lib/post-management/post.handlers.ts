@@ -8,6 +8,8 @@ import { Socket } from "socket.io";
 import { ClientEvents, ServerEvents } from "../events";
 
 
+// Database schema (copy of ./post.repository)
+
 // {
 //   message_id: {
 //     type: DataTypes.INTEGER,
@@ -19,7 +21,7 @@ import { ClientEvents, ServerEvents } from "../events";
 //     allowNull: false,
 //   },
 //   chat: {
-//     type: DataTypes.JSON,
+//     type: DataTypes.JSONB,
 //     allowNull: false,
 //   },
 //   text: {
@@ -29,20 +31,24 @@ import { ClientEvents, ServerEvents } from "../events";
 //     type: DataTypes.TEXT,
 //   },
 //   entities: {
-//     type: DataTypes.ARRAY(DataTypes.JSON),
+//     type: DataTypes.ARRAY(DataTypes.JSONB),
 //   },
 //   caption_entities: {
-//     type: DataTypes.ARRAY(DataTypes.JSON),
+//     type: DataTypes.ARRAY(DataTypes.JSONB),
 //   },
 //   photo: {
-//     type: DataTypes.ARRAY(DataTypes.JSON),
+//     type: DataTypes.ARRAY(DataTypes.JSONB),
 //   },
 //   video: {
-//     type: DataTypes.JSON,
+//     type: DataTypes.JSONB,
 //   },
 // },
 
 const idSchema = Joi.number()
+
+// Define what type of object is gonna be sent to the database
+// Follows parts of Telegram Bot API Message scheme
+// https://core.telegram.org/bots/api#message
 
 const postSchema = Joi.object({
   message_id: idSchema.alter({

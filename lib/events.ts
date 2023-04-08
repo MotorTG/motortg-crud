@@ -13,12 +13,14 @@ interface Success<P> {
 
 export type Response<P> = Error | Success<P> | Post | Identifier;
 
+// Events sent from this server to the clients
 export interface ServerEvents {
   "post:created": (post: Post) => void;
   "post:updated": (post: Post) => void;
   "post:deleted": (id: Identifier) => void;
 }
 
+// Events sent from clients to this server
 export interface ClientEvents {
   "post:list": (callback: (res: Response<Post[]>) => void) => void;
 
