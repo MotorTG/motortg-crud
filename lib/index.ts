@@ -9,18 +9,18 @@ import { PostgresPostRepository } from "./post-management/post.repository";
 //const httpServer = createServer();
 
 // Initialize database connection
-const sequelize = new Sequelize(process.env.DATABASE_URL || "postgres://postgres:changeit@localhost:5432/postgres", {
+const sequelize = new Sequelize(process.env.DATABASE_URL ?? "postgres://postgres:changeit@localhost:5432/postgres", {
   dialect: "postgres",
 });
 
 const connectionPool = new pg.Pool({
-  user: process.env.PGUSER || "postgres",
-  host: process.env.PGHOST || "localhost",
-  database: process.env.PGDATABASE || "postgres",
-  password: process.env.PGPASSWORD || "changeit",
-  port: Number(process.env.PGPORT),
+  user: process.env.PGUSER ?? "postgres",
+  host: process.env.PGHOST ?? "localhost",
+  database: process.env.PGDATABASE ?? "postgres",
+  password: process.env.PGPASSWORD ?? "changeit",
+  port: Number(process.env.PGPORT) ?? 5432,
   // @ts-ignore
-  ssl: { ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString() },
+  ssl: (process.env.PGSSLROOTCERT ? { ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString()} : null) ,
 });
 
 // Initialize websocket application
