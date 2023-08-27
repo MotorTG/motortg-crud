@@ -9,3 +9,15 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    groups:
+      socket:
+          # Define patterns to include dependencies in the group (based on
+          # dependency name)
+          patterns:
+            - "socket.io" # A single dependency name
+            - "@socket*"  # A wildcard string that matches multiple dependency names
+          # Define patterns to exclude dependencies from the group (based on
+          # dependency name)
+          #exclude-patterns:
+          #  - "gc_ruboconfig"
+          #  - "gocardless-*
