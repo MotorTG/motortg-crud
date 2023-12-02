@@ -1,8 +1,8 @@
 // import { createServer } from "http";
 import { createApplication } from "./app";
 import { Sequelize } from "sequelize";
-import fs from "fs"
-import pg from "pg";
+import { readFileSync } from "fs"
+import { Pool } from "pg";
 import { PostgresPostRepository } from "./post-management/post.repository";
 // import * as jose from 'jose'
 
@@ -13,14 +13,14 @@ const sequelize = new Sequelize(process.env.DATABASE_URL ?? "postgres://postgres
   dialect: "postgres",
 });
 
-const connectionPool = new pg.Pool({
+const connectionPool = new Pool({
   user: process.env.PGUSER ?? "postgres",
   host: process.env.PGHOST ?? "localhost",
   database: process.env.PGDATABASE ?? "postgres",
   password: process.env.PGPASSWORD ?? "changeit",
   port: Number(process.env.PGPORT) ?? 5432,
   // @ts-ignore
-  ssl: (process.env.PGSSLROOTCERT ? { ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString()} : null) ,
+  ssl: (process.env.PGSSLROOTCERT ? { ca: readFileSync(process.env.PGSSLROOTCERT).toString()} : null) ,
 });
 
 // Initialize websocket application

@@ -3,12 +3,12 @@ import { Server } from "socket.io";
 import { ClientEvents, ServerEvents } from "./events";
 import createPostHandlers from "./post-management/post.handlers";
 import { PostRepository } from "./post-management/post.repository";
-import pg from "pg";
+import { Pool } from "pg";
 import { createAdapter } from "@socket.io/postgres-adapter";
-import * as jose from 'jose'
+import { compactVerify, importSPKI, base64url } from 'jose'
 
 export interface Components {
-  connectionPool: pg.Pool;
+  connectionPool: Pool;
   postRepository: PostRepository;
 }
 
@@ -45,11 +45,11 @@ export function createApplication(components: Components): Server<ClientEvents, 
     console.log("token: ", token)
     // console.log(new TextDecoder().decode(jose.base64url.decode(process.env.PUBLIC_KEY)))
     try {
-      const { payload, protectedHeader } = await jose.compactVerify(
+      const { payload, protectedHeader } = await compactVerify(
         token,
-        await jose.importSPKI(
+        await importSPKI(
           // @ts-ignore
-          new TextDecoder().decode(jose.base64url.decode(process.env.PUBLIC_KEY)),
+          new TextDecoder().decode(base64url.decode(process.env.PUBLIC_KEY)),
           "ES256"
         ));
       if (new TextDecoder().decode(payload) === `Token verification`) {
