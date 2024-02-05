@@ -21,7 +21,7 @@
     "@socket.io/postgres-adapter": "^0.3.1",
     "bufferutil": "^4.0.8",
     "joi": "^17.12.1",
-    "jose": "^5.2.0",
+    "jose": "^5.2.1",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.35.2",
