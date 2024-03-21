@@ -27,7 +27,7 @@
     "sequelize": "^6.37.1",
     "socket.io": "^4.7.5",
     "ts-node": "^10.9.2",
-    "typescript": "==5.4.2",
+    "typescript": "==5.4.3",
     "utf-8-validate": "^6.0.3",
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.43.0"
   }
