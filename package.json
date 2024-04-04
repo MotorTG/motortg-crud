@@ -20,7 +20,7 @@
   "dependencies": {
     "@socket.io/postgres-adapter": "^0.3.1",
     "bufferutil": "^4.0.8",
-    "joi": "^17.12.2",
+    "joi": "^17.12.3",
     "jose": "^5.2.3",
     "pg": "^8.11.5",
     "pg-hstore": "^2.3.4",
