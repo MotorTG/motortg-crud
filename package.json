@@ -28,7 +28,7 @@
     "socket.io": "^4.7.5",
     "ts-node": "^10.9.2",
     "typescript": "==5.4.5",
-    "utf-8-validate": "^6.0.3",
+    "utf-8-validate": "^6.0.4",
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.43.0"
   }
 }
