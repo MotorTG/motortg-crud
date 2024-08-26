@@ -29,6 +29,6 @@
     "ts-node": "^10.9.2",
     "typescript": "==5.5.4",
     "utf-8-validate": "^6.0.4",
-    "uWebSockets.js": "uNetworking/uWebSockets.js#v20.47.0"
+    "uWebSockets.js": "uNetworking/uWebSockets.js#v20.48.0"
   }
 }
