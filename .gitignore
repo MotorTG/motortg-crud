@@ -36,3 +36,4 @@ pnpm-debug.log*
 !.yarn/sdks
 !.yarn/versions
 root-certs.crt
+prod-ca-2021.crt
