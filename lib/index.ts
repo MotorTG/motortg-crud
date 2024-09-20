@@ -20,7 +20,7 @@ const connectionPool = new Pool({
   password: process.env.PGPASSWORD ?? "changeit",
   port: Number(process.env.PGPORT) ?? 5432,
   // @ts-ignore
-  ssl: (process.env.PGSSLROOTCERT ? { ca: readFileSync(process.env.PGSSLROOTCERT).toString()} : null) ,
+  ssl: (process.env.PGSSLROOTCERT ? { ca: process.env.PGSSLROOTCERT} : null) ,
 });
 
 // Initialize websocket application
