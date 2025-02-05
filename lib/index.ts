@@ -1,7 +1,7 @@
 // import { createServer } from "http";
 import { createApplication } from "./app";
 import { Sequelize } from "sequelize";
-import { readFileSync } from "fs"
+// import { readFileSync } from "fs"
 import { Pool } from "pg";
 import { PostgresPostRepository } from "./post-management/post.repository";
 // import * as jose from 'jose'
