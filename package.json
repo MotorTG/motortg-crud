@@ -19,16 +19,13 @@
   },
   "dependencies": {
     "@socket.io/postgres-adapter": "^0.4.0",
-    "bufferutil": "^4.0.8",
     "joi": "^17.13.3",
-    "jose": "^5.9.2",
-    "pg": "^8.13.0",
+    "jose": "^5.9.6",
+    "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.3",
-    "socket.io": "^4.7.5",
+    "sequelize": "^6.37.5",
+    "socket.io": "^4.8.1",
     "ts-node": "^10.9.2",
-    "typescript": "==5.5.4",
-    "utf-8-validate": "^6.0.4",
-    "uWebSockets.js": "uNetworking/uWebSockets.js#v20.48.0"
+    "typescript": "==5.5.4"
   }
 }

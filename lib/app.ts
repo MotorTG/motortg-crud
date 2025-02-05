@@ -1,4 +1,3 @@
-import { App } from "uWebSockets.js";
 import { Server } from "socket.io";
 import { ClientEvents, ServerEvents } from "./events";
 import createPostHandlers from "./post-management/post.handlers";
@@ -13,11 +12,7 @@ export interface Components {
 }
 
 export function createApplication(components: Components): Server<ClientEvents, ServerEvents> {
-  const app = App();
   const io = new Server<ClientEvents, ServerEvents>();
-
-  // Attach to uWebSockets.js
-  io.attachApp(app)
 
   // Create handlers for socket.io events to listen
   const { createPost, readPost, updatePost, deletePost, listPost } =
@@ -91,14 +86,10 @@ export function createApplication(components: Components): Server<ClientEvents, 
   // Create Postgres Adapter and attach to server
   io.adapter(createAdapter(components.connectionPool));
 
-  // Start uWebSockets.js server
-  app.listen(Number(process.env.PORT) || 3000, (token) => {
-    if (!token) {
-      console.warn("port already in use");
-    } else {
-      console.log('open for business!! :rocket:');
-    }
-  });
+  // Start bun websocket server
+  io.listen(Number(process.env.PORT) || 3000);
+
+  console.log('open for business!! :rocket:');
 
   return io;
 }

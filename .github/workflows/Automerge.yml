@@ -1,10 +1,13 @@
 name: Dependabot auto-merge
-on: pull_request
+on: 
+  pull_request:
+    paths:
+      - "package.json"
 
 permissions:
   contents: write
   pull-requests: write
-
+  repository-projects: write
 jobs:
   dependabot:
     runs-on: ubuntu-latest
