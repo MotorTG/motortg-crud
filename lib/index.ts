@@ -14,13 +14,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL ?? "postgres://postgres
 });
 
 const connectionPool = new Pool({
-  user: process.env.PGUSER ?? "postgres",
-  host: process.env.PGHOST ?? "localhost",
-  database: process.env.PGDATABASE ?? "postgres",
-  password: process.env.PGPASSWORD ?? "changeit",
-  port: Number(process.env.PGPORT) ?? 5432,
-  // @ts-ignore
-  ssl: (process.env.PGSSLROOTCERT ? { ca: process.env.PGSSLROOTCERT, rejectUnauthorized: false} : null) ,
+  connectionString: process.env.DATABASE_URL ?? "postgres://postgres:changeit@localhost:5432/postgres",
 });
 
 // Initialize websocket application
