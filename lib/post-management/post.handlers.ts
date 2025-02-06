@@ -71,6 +71,8 @@ const postSchema = Joi.object({
     offset: Joi.number().required(),
     length: Joi.number().required(),
     url: Joi.string(),
+    custom_emoji_id: Joi.string(),
+    lang: Joi.string(),
     user: Joi.object({
       id: Joi.number().required(),
       is_bot: Joi.boolean().required(),
@@ -84,6 +86,8 @@ const postSchema = Joi.object({
     offset: Joi.number().required(),
     length: Joi.number().required(),
     url: Joi.string(),
+    custom_emoji_id: Joi.string(),
+    lang: Joi.string(),
     user: Joi.object({
       id: Joi.number().required(),
       is_bot: Joi.boolean().required(),
