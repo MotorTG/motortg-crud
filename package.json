@@ -4,7 +4,7 @@
   "description": "Server for the Basic CRUD Socket.IO example (with Postgres and multiple Socket.IO servers)",
   "private": true,
   "scripts": {
-    "start": "bun lib/index",
+    "start": "bun lib/index"
   },
   "repository": {
     "type": "git",

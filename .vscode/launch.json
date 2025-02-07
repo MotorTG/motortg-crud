@@ -2,15 +2,8 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "npm run dev",
-      "name": "Development server",
-      "request": "launch",
-      "type": "node-terminal",
-      "envFile": "${workspaceFolder}/.env"
-    },
-    {
-      "command": "npm run build && npm start",
-      "name": "Production server",
+      "command": "bun start",
+      "name": "Start",
       "request": "launch",
       "type": "node-terminal",
     }
