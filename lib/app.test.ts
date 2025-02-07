@@ -1,11 +1,11 @@
 import { expect, test, describe, beforeEach, afterEach, mock, spyOn } from "bun:test";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import { createApplication, Components } from "./app";
 import { PostRepository, PostgresPostRepository } from "./post-management/post.repository";
 import { Pool } from "pg";
-import { createAdapter } from "@socket.io/postgres-adapter";
-import { compactVerify, importSPKI, base64url } from 'jose';
-import createPostHandlers from "./post-management/post.handlers";
+//import { createAdapter } from "@socket.io/postgres-adapter";
+//import { compactVerify, importSPKI, base64url } from 'jose';
+//import createPostHandlers from "./post-management/post.handlers";
 
 // Mock dependencies
 mock.module("jose", () => ({
