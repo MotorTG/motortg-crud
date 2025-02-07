@@ -1,7 +1,7 @@
 import { expect, test, describe, beforeEach, afterEach, mock, spyOn } from "bun:test";
 import { Server } from "socket.io";
 import { createApplication, Components } from "./app";
-import { PostRepository, PostgresPostRepository } from "./post-management/post.repository";
+import { PostRepository } from "./post-management/post.repository";
 import { Pool } from "pg";
 //import { createAdapter } from "@socket.io/postgres-adapter";
 //import { compactVerify, importSPKI, base64url } from 'jose';
