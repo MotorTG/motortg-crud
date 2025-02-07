@@ -50,75 +50,63 @@ const idSchema = Joi.number()
 // Follows parts of Telegram Bot API Message scheme
 // https://core.telegram.org/bots/api#message
 
+const MessageEntitySchema = Joi.object({
+  type: Joi.string().required(),
+  offset: Joi.number().required(),
+  length: Joi.number().required(),
+  url: Joi.string(),
+  custom_emoji_id: Joi.string(),
+  lang: Joi.string(),
+  user: Joi.object({
+    id: Joi.number().required(),
+    is_bot: Joi.boolean().required(),
+    first_name: Joi.string().required(),
+    last_name: Joi.string(),
+    username: Joi.string()
+  })
+});
+
+const chatSchema = Joi.object({
+  id: Joi.number().integer().precision(64).required(),
+  type: Joi.string().valid('private', 'group', 'supergroup', 'channel').required(),
+  title: Joi.string(),
+  username: Joi.string(),
+  first_name: Joi.string(),
+  last_name: Joi.string()
+})
+
+const PhotoSizeSchema = Joi.object({
+  file_id: Joi.string().required(),
+  file_unique_id: Joi.string().required(),
+  width: Joi.number().required(),
+  height: Joi.number().required(),
+  file_size: Joi.number()
+})
+
+const VideoSchema = Joi.object({
+  file_id: Joi.string().required(),
+  file_unique_id: Joi.string().required(),
+  width: Joi.number().required(),
+  height: Joi.number().required(),
+  duration: Joi.number().required(),
+  thumb: PhotoSizeSchema,
+  mime_type: Joi.string(),
+  file_size: Joi.number()
+})
+
 const postSchema = Joi.object({
   message_id: idSchema.alter({
     create: (schema) => schema.required(),
     update: (schema) => schema.required(),
   }),
   date: Joi.number().required(),
-  chat: Joi.object({
-    id: Joi.number().integer().precision(64).required(),
-    type: Joi.string().valid('private', 'group', 'supergroup', 'channel').required(),
-    title: Joi.string(),
-    username: Joi.string(),
-    first_name: Joi.string(),
-    last_name: Joi.string()
-  }).required(),
+  chat: chatSchema.required(),
   text: Joi.string(),
   caption: Joi.string(),
-  entities: Joi.array().items(Joi.object({
-    type: Joi.string().required(),
-    offset: Joi.number().required(),
-    length: Joi.number().required(),
-    url: Joi.string(),
-    custom_emoji_id: Joi.string(),
-    lang: Joi.string(),
-    user: Joi.object({
-      id: Joi.number().required(),
-      is_bot: Joi.boolean().required(),
-      first_name: Joi.string().required(),
-      last_name: Joi.string(),
-      username: Joi.string()
-    })
-  })),
-  caption_entities: Joi.array().items(Joi.object({
-    type: Joi.string().required(),
-    offset: Joi.number().required(),
-    length: Joi.number().required(),
-    url: Joi.string(),
-    custom_emoji_id: Joi.string(),
-    lang: Joi.string(),
-    user: Joi.object({
-      id: Joi.number().required(),
-      is_bot: Joi.boolean().required(),
-      first_name: Joi.string().required(),
-      last_name: Joi.string(),
-      username: Joi.string()
-    })
-  })),
-  photo: Joi.array().items(Joi.object({
-    file_id: Joi.string().required(),
-    file_unique_id: Joi.string().required(),
-    width: Joi.number().required(),
-    height: Joi.number().required(),
-    file_size: Joi.number()
-  })),
-  video: Joi.object({
-    file_id: Joi.string().required(),
-    file_unique_id: Joi.string().required(),
-    width: Joi.number().required(),
-    height: Joi.number().required(),
-    duration: Joi.number().required(),
-    thumb: Joi.object({
-      file_id: Joi.string().required(),
-      file_unique_id: Joi.string().required(),
-      width: Joi.number().required(),
-      height: Joi.number().required(),
-      file_size: Joi.number()
-    }),
-    mime_type: Joi.string(),
-    file_size: Joi.number()
-  }),
+  entities: Joi.array().items(MessageEntitySchema),
+  caption_entities: Joi.array().items(MessageEntitySchema),
+  photo: Joi.array().items(PhotoSizeSchema),
+  video: VideoSchema,
 });
 
 export default function (components: Components) {
@@ -127,7 +115,7 @@ export default function (components: Components) {
     createPost: async function (
       socket: Socket<ClientEvents, ServerEvents>,
       payload: Post
-      ) {
+    ) {
       // validate the payload
       const { error, value } = postSchema.tailor("create").validate(payload, {
         abortEarly: false,
@@ -135,7 +123,7 @@ export default function (components: Components) {
       });
 
       if (error) {
-        const errorMsg ={
+        const errorMsg = {
           error: Errors.INVALID_PAYLOAD,
           errorDetails: mapErrorDetails(error.details),
         }
