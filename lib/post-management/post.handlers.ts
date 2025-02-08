@@ -94,7 +94,7 @@ const VideoSchema = Joi.object({
   file_size: Joi.number()
 })
 
-const postSchema = Joi.object({
+export const postSchema = Joi.object({
   message_id: idSchema.alter({
     create: (schema) => schema.required(),
     update: (schema) => schema.required(),

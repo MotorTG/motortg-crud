@@ -61,9 +61,9 @@ export class PostgresPostRepository extends PostRepository {
     );
   }
 
-  findAll(): Promise<Post[]> {
-    return this.sequelize.transaction((transaction: any) => {
-      return Post.findAll({ transaction });
+  async findAll(): Promise<Post[]> {
+    return this.sequelize.transaction(async (transaction: any) => {
+      return await Post.findAll({ transaction });
     });
   }
 
