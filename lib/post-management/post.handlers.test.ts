@@ -1,4 +1,4 @@
-import { expect, test, describe, beforeEach, afterEach, mock } from "bun:test";
+import { expect, it, describe, beforeEach, afterEach, mock } from "bun:test";
 import createPostHandlers from "./post.handlers";
 import { postSchema } from "./post.handlers";
 import { Post } from "./post.repository";
@@ -76,7 +76,7 @@ describe("Detailed Post Handlers Tests", () => {
 
   // Tests for createPost
   describe("createPost", () => {
-    test("should validate payload, save post and broadcast creation", async () => {
+    it("should validate payload, save post and broadcast creation", async () => {
       const validatedPayload = postSchema.tailor("create").validate(validPayload, {
         abortEarly: false,
         stripUnknown: true,
@@ -87,13 +87,13 @@ describe("Detailed Post Handlers Tests", () => {
       expect(result).toEqual(validatedPayload);
     });
 
-    test("should return error on invalid payload", async () => {
+    it("should return error on invalid payload", async () => {
       const result = await handlers.createPost(socketMock, invalidPayload);
       expect(result.error).toEqual(Errors.INVALID_PAYLOAD);
       expect(postRepository.save).not.toHaveBeenCalled();
     });
 
-    test("should return sanitized error if repository.save fails", async () => {
+    it("should return sanitized error if repository.save fails", async () => {
       const errorMessage = "an unknown error has occurred";
       postRepository.save = mock(() => { throw new Error(errorMessage); });
       const result = await handlers.createPost(socketMock, validPayload);
@@ -103,21 +103,21 @@ describe("Detailed Post Handlers Tests", () => {
 
   // Tests for readPost
   describe("readPost", () => {
-    test("should call callback with data for valid id", async () => {
+    it("should call callback with data for valid id", async () => {
       const callback = mock();
       await handlers.readPost(validPayload.message_id, callback);
       expect(postRepository.findById).toHaveBeenCalledWith(validPayload.message_id);
       expect(callback).toHaveBeenCalledWith({ data: validPayload });
     });
 
-    test("should call callback with error for invalid id", async () => {
+    it("should call callback with error for invalid id", async () => {
       const callback = mock();
       await handlers.readPost("invalid_id", callback);
       expect(callback).toHaveBeenCalledWith({ error: Errors.ENTITY_NOT_FOUND });
       expect(postRepository.findById).not.toHaveBeenCalled();
     });
 
-    test("should call callback with sanitized error if repository.findById fails", async () => {
+    it("should call callback with sanitized error if repository.findById fails", async () => {
       const callback = mock();
       const errorMessage = "an unknown error has occurred";
       postRepository.findById = mock(() => { throw new Error(errorMessage); });
@@ -128,7 +128,7 @@ describe("Detailed Post Handlers Tests", () => {
 
   // Tests for updatePost
   describe("updatePost", () => {
-    test("should validate payload, update post and broadcast update", async () => {
+    it("should validate payload, update post and broadcast update", async () => {
       const validatedPayload = postSchema.tailor("update").validate(validPayload, {
         abortEarly: false,
         stripUnknown: true,
@@ -139,13 +139,13 @@ describe("Detailed Post Handlers Tests", () => {
       expect(result).toEqual(validatedPayload);
     });
 
-    test("should return error on invalid payload", async () => {
+    it("should return error on invalid payload", async () => {
       const result = await handlers.updatePost(socketMock, invalidPayload);
       expect(result.error).toEqual(Errors.INVALID_PAYLOAD);
       expect(postRepository.save).not.toHaveBeenCalled();
     });
 
-    test("should return sanitized error if repository.save fails on update", async () => {
+    it("should return sanitized error if repository.save fails on update", async () => {
       const errorMessage = "an unknown error has occurred";
       postRepository.save = mock(() => { throw new Error(errorMessage); });
       const result = await handlers.updatePost(socketMock, validPayload);
@@ -155,20 +155,20 @@ describe("Detailed Post Handlers Tests", () => {
 
   // Tests for deletePost
   describe("deletePost", () => {
-    test("should validate id, delete post and broadcast deletion", async () => {
+    it("should validate id, delete post and broadcast deletion", async () => {
       const result = await handlers.deletePost(socketMock, validPayload.message_id);
       expect(postRepository.deleteById).toHaveBeenCalledWith(validPayload.message_id);
       expect(socketMock.broadcast.emit).toHaveBeenCalledWith("post:deleted", validPayload.message_id);
       expect(result).toEqual(validPayload.message_id);
     });
 
-    test("should return error for invalid id", async () => {
+    it("should return error for invalid id", async () => {
       const result = await handlers.deletePost(socketMock, "invalid_id");
       expect(result.error).toEqual(Errors.ENTITY_NOT_FOUND);
       expect(postRepository.deleteById).not.toHaveBeenCalled();
     });
 
-    test("should return sanitized error if repository.deleteById fails", async () => {
+    it("should return sanitized error if repository.deleteById fails", async () => {
       const errorMessage = "an unknown error has occurred";
       postRepository.deleteById = mock(() => { throw new Error(errorMessage); });
       const result = await handlers.deletePost(socketMock, validPayload.message_id);
@@ -178,14 +178,14 @@ describe("Detailed Post Handlers Tests", () => {
 
   // Tests for listPost
   describe("listPost", () => {
-    test("should callback with list of posts on success", async () => {
+    it("should callback with list of posts on success", async () => {
       const callback = mock();
       await handlers.listPost(callback);
       expect(postRepository.findAll).toHaveBeenCalled();
       expect(callback).toHaveBeenCalledWith({ data: [validPayload] });
     });
 
-    test("should callback with sanitized error if repository.findAll fails", async () => {
+    it("should callback with sanitized error if repository.findAll fails", async () => {
       const callback = mock();
       const errorMessage = "an unknown error has occurred";
       postRepository.findAll = mock(() => { throw new Error(errorMessage); });

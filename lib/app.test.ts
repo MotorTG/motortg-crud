@@ -1,31 +1,18 @@
-import { expect, test, describe, beforeEach, afterEach, mock, spyOn } from "bun:test";
+import { expect, it, describe, beforeEach, afterEach, mock, spyOn, afterAll } from "bun:test";
 import { Server } from "socket.io";
 import { createApplication, Components } from "./app";
 import { PostRepository } from "./post-management/post.repository";
 import { Pool } from "pg";
 //import { createAdapter } from "@socket.io/postgres-adapter";
 //import { compactVerify, importSPKI, base64url } from 'jose';
-//import createPostHandlers from "./post-management/post.handlers";
+import * as postHandlersModule from "./post-management/post.handlers";
 
-// Mock dependencies
-mock.module("jose", () => ({
-    compactVerify: (token: string) => {
-        if (token === "invalid.token" || !token) {
-            return Promise.reject(new Error("Invalid token"));
-        }
-        return Promise.resolve({
-            payload: new TextEncoder().encode("Token verification"),
-            protectedHeader: {}
-        });
-    },
-    importSPKI: () => Promise.resolve({}),
-    base64url: { decode: () => new Uint8Array() }
-}));
 
 describe("createApplication", () => {
     let components: Components;
     let io: Server;
     let socketMock: any;
+    let postHandlersSpy: any;
     let listenSpy: any;
     let createPostHandlersMock: any;
     let createPostMock: any, readPostMock: any, updatePostMock: any, deletePostMock: any, listPostMock: any;
@@ -46,9 +33,8 @@ describe("createApplication", () => {
             listPost: listPostMock,
         }));
 
-        mock.module("./post-management/post.handlers", () => ({
-            default: createPostHandlersMock
-        }));
+        postHandlersSpy = spyOn(postHandlersModule, "default");
+        postHandlersSpy.mockImplementation(createPostHandlersMock);
 
         components = {
             connectionPool: new Pool({
@@ -82,38 +68,43 @@ describe("createApplication", () => {
     afterEach(() => {
         mock.restore();
         listenSpy.mockRestore();
+        io.close();
+    });
+
+    afterAll(() => {
+        postHandlersSpy.mockRestore();
     });
 
     // A. Server Initialization Tests
     describe("Server Initialization", () => {
-        test("should create new Server instance", () => {
+        it("should create new Server instance", () => {
             expect(io).toBeInstanceOf(Server);
         });
 
-        test("should listen on specified port", () => {
+        it("should listen on specified port", () => {
             expect(listenSpy).toHaveBeenCalledWith(3000);
         });
 
-        test("should call createPostHandlers with components", () => {
+        it("should call createPostHandlers with components", () => {
             expect(createPostHandlersMock).toHaveBeenCalledWith(components);
         });
     });
 
     // B. Public Namespace Tests
     describe("Public Namespace", () => {
-        test("should handle connection event", () => {
+        it("should handle connection event", () => {
             const connectionHandler = io.listeners("connection")[0];
             connectionHandler(socketMock);
             expect(socketMock.on).toHaveBeenCalledTimes(2);
         });
 
-        test("should register post:read handler", () => {
+        it("should register post:read handler", () => {
             const connectionHandler = io.listeners("connection")[0];
             connectionHandler(socketMock);
             expect(socketMock.on).toHaveBeenCalledWith("post:read", expect.any(Function));
         });
 
-        test("should register post:list handler", () => {
+        it("should register post:list handler", () => {
             const connectionHandler = io.listeners("connection")[0];
             connectionHandler(socketMock);
             expect(socketMock.on).toHaveBeenCalledWith("post:list", expect.any(Function));
@@ -121,7 +112,7 @@ describe("createApplication", () => {
 
     });
     describe("Events without callback", () => {
-        test("should handle post:list request returning a promise", async () => {
+        it("should handle post:list request returning a promise", async () => {
             const connectionHandler = io.listeners("connection")[0];
             connectionHandler(socketMock);
 
@@ -137,7 +128,7 @@ describe("createApplication", () => {
     });
     // C. Protected Event Handlers Tests
     describe("Protected Event Handlers", () => {
-        test("should handle post:create event", async () => {
+        it("should handle post:create event", async () => {
             const callback = mock();
             const payload = { title: "Test Post" };
 
@@ -153,7 +144,7 @@ describe("createApplication", () => {
             expect(callback).toHaveBeenCalled();
         });
 
-        test("should handle post:delete event", async () => {
+        it("should handle post:delete event", async () => {
             const callback = mock();
             const payload = { id: 1 };
 
@@ -169,7 +160,7 @@ describe("createApplication", () => {
             expect(callback).toHaveBeenCalled();
         });
 
-        test("should handle post:update event", async () => {
+        it("should handle post:update event", async () => {
             const callback = mock();
             const payload = { id: 1, title: "Updated Post" };
 
