@@ -89,7 +89,5 @@ export function createApplication(components: Components): Server<ClientEvents, 
   // Start bun websocket server
   io.listen(Number(process.env.PORT) || 3000);
 
-  console.log('open for business!! :rocket:');
-
   return io;
 }

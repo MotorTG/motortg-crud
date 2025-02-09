@@ -46,6 +46,9 @@ const main = async () => {
 
   // uncomment when running in standalone mode
   // httpServer.listen(process.env.PORT || 3000);
+
+  console.log('open for business!! :rocket:');
+
 };
 
 main();
