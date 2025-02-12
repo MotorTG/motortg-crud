@@ -49,6 +49,7 @@ export class PostgresPostRepository extends PostRepository {
         },
         media_group_id: {
           type: DataTypes.TEXT,
+          unique: true,
         },
         photo: {
           type: DataTypes.ARRAY(DataTypes.JSONB),
