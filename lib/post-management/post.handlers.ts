@@ -105,6 +105,7 @@ export const postSchema = Joi.object({
   caption: Joi.string(),
   entities: Joi.array().items(MessageEntitySchema),
   caption_entities: Joi.array().items(MessageEntitySchema),
+  media_group_id: Joi.string(),
   photo: Joi.array().items(PhotoSizeSchema),
   video: VideoSchema,
 });

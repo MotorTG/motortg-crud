@@ -47,6 +47,9 @@ export class PostgresPostRepository extends PostRepository {
         caption_entities: {
           type: DataTypes.ARRAY(DataTypes.JSONB),
         },
+        media_group_id: {
+          type: DataTypes.STRING,
+        },
         photo: {
           type: DataTypes.ARRAY(DataTypes.JSONB),
         },
