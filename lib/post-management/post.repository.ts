@@ -1,3 +1,4 @@
+import { Cacheable } from "typescript-cacheable";
 import { Errors } from "../util";
 import { Model, DataTypes, Sequelize, Identifier, Optional } from "sequelize";
 
@@ -64,9 +65,10 @@ export class PostgresPostRepository extends PostRepository {
     );
   }
 
+  @Cacheable({ ttl: 180000, cacheUndefined: false })
   async findAll(): Promise<Post[]> {
     return this.sequelize.transaction(async (transaction: any) => {
-      return await Post.findAll({ transaction });
+      return await Post.findAll({ order: [['message_id', 'DESC']], transaction });
     });
   }
 
