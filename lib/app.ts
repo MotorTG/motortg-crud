@@ -26,7 +26,9 @@ export function createApplication(components: Components): Server<ClientEvents, 
     socket.on("post:read", readPost);
 
     // Download all messages in the database
-    socket.on("post:list", listPost);
+    socket.on("post:list", async (callback) => {
+      callback(await listPost(socket));
+    });
   });
 
   // Server-to-server auth

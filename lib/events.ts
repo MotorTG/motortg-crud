@@ -22,7 +22,15 @@ export interface ServerEvents {
 
 // Events sent from clients to this server
 export interface ClientEvents {
-  "post:list": (callback: (res: Response<Post[]>) => void) => void;
+  "post:list": (
+    callback: (res: {
+      data: Post[];
+      error?: undefined;
+    } | {
+      error: string;
+      data?: undefined;
+    }) => void
+  ) => void;
 
   "post:create": (
     payload: Omit<Post, "id">,

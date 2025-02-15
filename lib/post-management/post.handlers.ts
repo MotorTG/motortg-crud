@@ -226,15 +226,17 @@ export default function (components: Components) {
       return id;
     },
 
-    listPost: async function (callback: (res: Response<Post[]>) => void) {
+    listPost: async function(
+      socket: Socket<ClientEvents, ServerEvents>,
+    ) {
       try {
-        callback({
+        return {
           data: await postRepository.findAll(),
-        });
+        };
       } catch (e) {
-        callback({
+        return {
           error: sanitizeErrorMessage(e),
-        });
+        };
       }
     },
   };
