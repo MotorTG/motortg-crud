@@ -4,6 +4,7 @@ import { Model, DataTypes, Sequelize, Identifier, Optional } from "sequelize";
 
 abstract class CrudRepository<P, ID> {
   abstract findAll(): Promise<P[]>;
+  abstract findAllOffset(offset: number, limit: number): Promise<P[]>;
   abstract findById(id: ID): Promise<P>;
   abstract save(entity: Omit<P,"id">): Promise<[Post, boolean]>;
   abstract deleteById(id: ID): Promise<void>;
@@ -65,10 +66,17 @@ export class PostgresPostRepository extends PostRepository {
     );
   }
 
-  @Cacheable({ ttl: 180000, cacheUndefined: false })
+  @((Cacheable as any)({ ttl: 180000, cacheUndefined: false }))
   async findAll(): Promise<Post[]> {
     return this.sequelize.transaction(async (transaction: any) => {
       return await Post.findAll({ order: [['message_id', 'DESC']], transaction });
+    });
+  }
+
+  @((Cacheable as any)({ ttl: 180000, cacheUndefined: false }))
+  async findAllOffset(offset: number, limit: number): Promise<Post[]> {
+    return this.sequelize.transaction(async (transaction: any) => {
+      return await Post.findAll({ offset, limit, order: [['message_id', 'DESC']], transaction });
     });
   }
 

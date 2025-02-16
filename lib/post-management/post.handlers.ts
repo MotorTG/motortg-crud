@@ -226,12 +226,14 @@ export default function (components: Components) {
       return id;
     },
 
-    listPost: async function(
+    listPost: async function (
       socket: Socket<ClientEvents, ServerEvents>,
+      offset: number,
+      limit: number
     ) {
       try {
         return {
-          data: await postRepository.findAll(),
+          data: await postRepository.findAllOffset(offset, limit),
         };
       } catch (e) {
         return {
