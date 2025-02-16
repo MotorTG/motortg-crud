@@ -84,6 +84,7 @@ describe("Detailed Post Handlers Tests", () => {
       findById: mock(() => Promise.resolve(validPayload)),
       deleteById: mock(() => Promise.resolve(validPayload.message_id)),
       findAll: mock(() => Promise.resolve([validPayload])),
+      findAllOffset: mock(() => Promise.resolve([validPayload])),
     };
 
     components = { postRepository };
@@ -110,7 +111,6 @@ describe("Detailed Post Handlers Tests", () => {
       }).value;
       const result = await handlers.createPost(socketMock, validPayload);
       expect(postRepository.save).toHaveBeenCalledWith(validatedPayload);
-      expect(socketMock.broadcast.emit).toHaveBeenCalledWith("post:created", validatedPayload);
       expect(result).toEqual(validatedPayload);
     });
 
@@ -162,7 +162,6 @@ describe("Detailed Post Handlers Tests", () => {
       }).value;
       const result = await handlers.updatePost(socketMock, validPayload);
       expect(postRepository.save).toHaveBeenCalledWith(validatedPayload);
-      expect(socketMock.broadcast.emit).toHaveBeenCalledWith("post:updated", validatedPayload);
       expect(result).toEqual(validatedPayload);
     });
 
@@ -185,7 +184,6 @@ describe("Detailed Post Handlers Tests", () => {
     it("should validate id, delete post and broadcast deletion", async () => {
       const result = await handlers.deletePost(socketMock, validPayload.message_id);
       expect(postRepository.deleteById).toHaveBeenCalledWith(validPayload.message_id);
-      expect(socketMock.broadcast.emit).toHaveBeenCalledWith("post:deleted", validPayload.message_id);
       expect(result).toEqual(validPayload.message_id);
     });
 
@@ -208,15 +206,15 @@ describe("Detailed Post Handlers Tests", () => {
   // Tests for listPost
   describe("listPost", () => {
     it("should return list of posts on success", async () => {
-      const result = await handlers.listPost(socketMock);
-      expect(postRepository.findAll).toHaveBeenCalled();
+      const result = await handlers.listPost(socketMock, 0, 100);
+      expect(postRepository.findAllOffset).toHaveBeenCalled();
       expect(result).toEqual({ data: [validPayload] });
     });
 
     it("should return sanitized error if repository.findAll fails", async () => {
       const errorMessage = "an unknown error has occurred";
-      postRepository.findAll = mock(() => { throw new Error(errorMessage); });
-      const result = await handlers.listPost(socketMock);
+      postRepository.findAllOffset = mock(() => { throw new Error(errorMessage); });
+      const result = await handlers.listPost(socketMock, 0, 100);
       expect(result).toEqual({ error: errorMessage });
     });
   });

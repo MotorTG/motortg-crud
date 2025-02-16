@@ -70,18 +70,24 @@ export function createApplication(components: Components): Server<ClientEvents, 
 
     // Create a row to the database and send it over to all clients connected
     socket.on("post:create", async (payload, callback) => {
-      callback(await createPost(socket, payload));
+      const ack = await createPost(socket, payload);
+      io.emit("post:created", ack);
+      callback(ack);
     });
 
     // Delete a row to the database and notify it over to all clients connected
     // Currently there is no way to delete a row using Telegram Bot API
-    socket.on("post:delete", (payload, callback) => {
-      callback(deletePost(socket, payload));
+    socket.on("post:delete", async (payload, callback) => {
+      const ack = await deletePost(socket, payload);
+      io.emit("post:deleted", ack);
+      callback(ack);
     });
 
     // Update a row to the database and notify it over to all clients connected
     socket.on("post:update", async (payload, callback) => {
-      callback(await updatePost(socket, payload));
+      const ack = await updatePost(socket, payload);
+      io.emit("post:updated", ack);
+      callback(ack);
     });
   });
 

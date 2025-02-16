@@ -141,9 +141,6 @@ export default function (components: Components) {
         };
       }
 
-      // notify the other users
-      socket.broadcast.emit("post:created", value);
-
       // acknowledge the creation
       return await value;
     },
@@ -197,7 +194,6 @@ export default function (components: Components) {
         };
       }
 
-      socket.broadcast.emit("post:updated", value);
       return await value;
     },
 
@@ -222,7 +218,6 @@ export default function (components: Components) {
         };
       }
 
-      socket.broadcast.emit("post:deleted", id);
       return id;
     },
 
