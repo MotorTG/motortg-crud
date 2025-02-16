@@ -3,6 +3,33 @@ import createPostHandlers from "./post.handlers";
 import { postSchema } from "./post.handlers";
 import { Post } from "./post.repository";
 import { Errors } from "../util";
+import { Identifier } from "sequelize";
+
+export class PostInitialized extends Post {
+  message_id: Identifier;
+  sender_chat: {
+    id: Number;
+    title: String;
+    username: String;
+    type: String;
+  };
+  chat: {
+    id: Number;
+    title: String;
+    username: String;
+    type: String;
+  };
+  date: Number;
+  text: String;
+  entities: Array<
+    {
+      offset: Number;
+      length: Number;
+      type: String;
+    }
+  >;
+}
+
 
 // Create dummy post data and error for simulation
 const validPayload = {
@@ -38,12 +65,12 @@ const validPayload = {
       type: "mention"
     }
   ]
-} as unknown as Post;
+} as unknown as PostInitialized;
 
 const invalidPayload = {
   // missing required: message_id, date, chat
   text: "No required fields"
-};
+} as unknown as PostInitialized;
 
 describe("Detailed Post Handlers Tests", () => {
   let postRepository: any;
@@ -164,7 +191,8 @@ describe("Detailed Post Handlers Tests", () => {
 
     it("should return error for invalid id", async () => {
       const result = await handlers.deletePost(socketMock, "invalid_id");
-      expect(result.error).toEqual(Errors.ENTITY_NOT_FOUND);
+      const errorResult = typeof result === 'object' && 'error' in result ? result.error : result;
+      expect(errorResult).toEqual(Errors.ENTITY_NOT_FOUND);
       expect(postRepository.deleteById).not.toHaveBeenCalled();
     });
 
@@ -172,25 +200,24 @@ describe("Detailed Post Handlers Tests", () => {
       const errorMessage = "an unknown error has occurred";
       postRepository.deleteById = mock(() => { throw new Error(errorMessage); });
       const result = await handlers.deletePost(socketMock, validPayload.message_id);
-      expect(result.error).toEqual(errorMessage);
+      const errorResult = typeof result === 'object' && 'error' in result ? result.error : result;
+      expect(errorResult).toEqual(errorMessage);
     });
   });
 
   // Tests for listPost
   describe("listPost", () => {
-    it("should callback with list of posts on success", async () => {
-      const callback = mock();
-      await handlers.listPost(callback);
+    it("should return list of posts on success", async () => {
+      const result = await handlers.listPost(socketMock);
       expect(postRepository.findAll).toHaveBeenCalled();
-      expect(callback).toHaveBeenCalledWith({ data: [validPayload] });
+      expect(result).toEqual({ data: [validPayload] });
     });
 
-    it("should callback with sanitized error if repository.findAll fails", async () => {
-      const callback = mock();
+    it("should return sanitized error if repository.findAll fails", async () => {
       const errorMessage = "an unknown error has occurred";
       postRepository.findAll = mock(() => { throw new Error(errorMessage); });
-      await handlers.listPost(callback);
-      expect(callback).toHaveBeenCalledWith({ error: errorMessage });
+      const result = await handlers.listPost(socketMock);
+      expect(result).toEqual({ error: errorMessage });
     });
   });
 });

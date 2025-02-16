@@ -113,6 +113,8 @@ describe("createApplication", () => {
     });
     describe("Events without callback", () => {
         it("should handle post:list request returning a promise", async () => {
+            const callback = mock();
+
             const connectionHandler = io.listeners("connection")[0];
             connectionHandler(socketMock);
 
@@ -120,9 +122,9 @@ describe("createApplication", () => {
                 call => call[0] === "post:list"
             )[1];
 
-            // Assume the event handler returns a promise instead of using a callback.
-            await expect(listHandler()).resolves.toEqual([{ id: 1 }]);
+            await listHandler(callback);
             expect(listPostMock).toHaveBeenCalled();
+            expect(callback).toHaveBeenCalled();
         });
 
     });
