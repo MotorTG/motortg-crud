@@ -6,6 +6,21 @@
       "name": "Start",
       "request": "launch",
       "type": "node-terminal",
-    }
+    },
+    {
+      "type": "bun",
+      "request": "launch",
+      "name": "Debug Bun",
+      // The path to a JavaScript or TypeScript file to run.
+      "program": "lib/index",
+      // If the program should be run in watch mode.
+      // This is equivalent to passing `--watch` to the `bun` executable.
+      // You can also set this to "hot" to enable hot reloading using `--hot`.
+      "watchMode": "hot",
+      // If the debugger should stop on the first line of the program.
+      "stopOnEntry": false,
+      // If the debugger should be disabled. (for example, breakpoints will not be hit)
+      "noDebug": false,
+    },
   ]
 }
