@@ -1,4 +1,4 @@
-import { Cacheable } from "typescript-cacheable";
+import { Cacheable, globalClear, globalSet } from "typescript-cacheable";
 import { Errors } from "../util";
 import { Model, DataTypes, Sequelize, Identifier, Optional } from "sequelize";
 
@@ -76,7 +76,9 @@ export class PostgresPostRepository extends PostRepository {
   @((Cacheable as any)({ ttl: 180000, cacheUndefined: false }))
   async findAllOffset(offset: number, limit: number): Promise<Post[]> {
     return this.sequelize.transaction(async (transaction: any) => {
-      return await Post.findAll({ offset, limit, order: [['message_id', 'DESC']], transaction });
+      const posts = await Post.findAll({ offset, limit, order: [['message_id', 'DESC']], transaction });
+      globalSet(this, "findAllOffset", [offset, limit], posts);
+      return posts;
     });
   }
 
@@ -94,6 +96,9 @@ export class PostgresPostRepository extends PostRepository {
 
   save(entity): Promise<[Post, boolean]> {
     return this.sequelize.transaction((transaction: any) => {
+      //console.log(globalKeys(this, "findAllOffset"));
+      globalClear(this, "findAllOffset");
+      //console.log(globalKeys(this, "findAllOffset"));
       return Post.upsert(entity, { transaction });
     });
   }
