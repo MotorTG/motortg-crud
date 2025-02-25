@@ -68,6 +68,14 @@ export function createApplication(components: Components): Server<ClientEvents, 
   // Only called if auth is successful, otherwise connection drops and never called
   io.of("/post").on("connection", (socket) => {
 
+    socket.onAny((event, ...args) => {
+      console.log(`any: ${event}`, args);
+    });
+
+    socket.onAnyOutgoing((event, ...args) => {
+      console.log(`outgoing: ${event}`, args);
+    });
+
     // Create a row to the database and send it over to all clients connected
     socket.on("post:create", async (payload, callback) => {
       const ack = await createPost(socket, payload);
