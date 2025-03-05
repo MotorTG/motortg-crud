@@ -57,6 +57,8 @@ describe("createApplication", () => {
                 auth: { token: "Token verification" }
             },
             on: mock(),
+            onAny: mock(),
+            onAnyOutgoing: mock(),
             emit: mock(),
             broadcast: { emit: mock() }
         };
