@@ -23,6 +23,7 @@ export interface ServerEvents {
 // Events sent from clients to this server
 export interface ClientEvents {
   "post:list": (
+    offset: number,
     callback: (res: {
       data: Post[];
       error?: undefined;

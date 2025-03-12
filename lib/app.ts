@@ -26,8 +26,8 @@ export function createApplication(components: Components): Server<ClientEvents, 
     socket.on("post:read", readPost);
 
     // Download all messages in the database
-    socket.on("post:list", async (callback) => {
-      callback(await listPost(socket, 0, 100));
+    socket.on("post:list", async (offset, callback) => {
+      callback(await listPost(socket, offset, 10));
     });
   });
 
