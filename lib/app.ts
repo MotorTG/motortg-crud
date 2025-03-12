@@ -26,7 +26,16 @@ export function createApplication(components: Components): Server<ClientEvents, 
     socket.on("post:read", readPost);
 
     // Download all messages in the database
-    socket.on("post:list", async (offset, callback) => {
+    // TODO: Make sure that when offset isn't passed, server won't crash
+    socket.on("post:list", async (...args) => {
+      let offset: number = 0;
+      let callback: Function;
+      if (args.length === 1) {
+        callback = args[0];
+      } else {
+        offset = args[0] ?? 0;
+        callback = args[1];
+      }
       callback(await listPost(socket, offset, 10));
     });
   });
