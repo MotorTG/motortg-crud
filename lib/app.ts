@@ -36,7 +36,7 @@ export function createApplication(components: Components): Server<ClientEvents, 
         offset = args[0] ?? 0;
         callback = args[1];
       }
-      callback(await listPost(socket, offset, 10));
+      callback(await listPost(socket, offset, 12));
     });
   });
 
