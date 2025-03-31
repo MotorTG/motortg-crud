@@ -19,7 +19,7 @@
     "joi": "^17.13.3",
     "jose": "^6.0.10",
     "pg": "^8.14.1",
-    "sequelize": "^6.37.6",
+    "sequelize": "^6.37.7",
     "socket.io": "^4.8.1",
     "typescript-cacheable": "^3.0.3"
   },
