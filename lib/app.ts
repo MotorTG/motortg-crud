@@ -5,6 +5,9 @@ import { PostRepository } from "./post-management/post.repository";
 import { Pool } from "pg";
 import { createAdapter } from "@socket.io/postgres-adapter";
 import { compactVerify, importSPKI, base64url } from 'jose'
+import { createServer } from "http";
+const httpServer = createServer();
+
 
 export interface Components {
   connectionPool: Pool;
@@ -12,7 +15,12 @@ export interface Components {
 }
 
 export function createApplication(components: Components): Server<ClientEvents, ServerEvents> {
-  const io = new Server<ClientEvents, ServerEvents>();
+  const io = new Server<ClientEvents, ServerEvents>(httpServer, {
+    cors: {
+      origin: "https://motortg.it",
+    },
+    // transports: ["websocket"],
+  });
 
   // Create handlers for socket.io events to listen
   const { createPost, readPost, updatePost, deletePost, listPost } =

@@ -1,12 +1,9 @@
-// import { createServer } from "http";
 import { createApplication } from "./app";
 import { Sequelize } from "sequelize";
 // import { readFileSync } from "fs"
 import { Pool } from "pg";
 import { PostgresPostRepository } from "./post-management/post.repository";
 // import * as jose from 'jose'
-
-//const httpServer = createServer();
 
 // Initialize database connection
 const sequelize = new Sequelize(process.env.DATABASE_URL ?? "postgres://postgres:changeit@localhost:5432/postgres", {
@@ -19,7 +16,6 @@ const connectionPool = new Pool({
 
 // Initialize websocket application
 createApplication(
-  //httpServer,
   {
     connectionPool,
     postRepository: new PostgresPostRepository(sequelize),
