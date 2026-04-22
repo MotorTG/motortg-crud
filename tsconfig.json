@@ -4,6 +4,7 @@
       "module": "commonjs",
       "target": "es2017",
       "esModuleInterop": true,
+      "experimentalDecorators": true,
       "strict": false
     },
     "include": [
