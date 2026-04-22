@@ -1,5 +1,6 @@
 name: Dependabot auto-merge
 on: 
+  merge_group:
   pull_request:
     paths:
       - "package.json"
