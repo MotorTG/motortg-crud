@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@socket.io/postgres-adapter": "^0.5.0",
-    "joi": "^18.2.5",
+    "joi": "^18.2.8",
     "jose": "^6.2.10",
     "pg": "^8.23.0",
     "sequelize": "^6.37.8",
