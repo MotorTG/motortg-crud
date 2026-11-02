@@ -7,7 +7,7 @@
       "dependencies": {
         "@socket.io/postgres-adapter": "^0.5.0",
         "joi": "^18.3.1",
-        "jose": "^6.2.13",
+        "jose": "^6.2.14",
         "pg": "^8.23.1",
         "sequelize": "^6.37.8",
         "socket.io": "^4.8.4",
@@ -75,7 +75,7 @@
 
     "joi": ["joi@18.3.1", "", { "dependencies": { "@hapi/address": "^5.1.1", "@hapi/formula": "^3.0.2", "@hapi/hoek": "^11.0.7", "@hapi/pinpoint": "^2.0.1", "@hapi/tlds": "^1.1.1", "@hapi/topo": "^6.0.2", "@standard-schema/spec": "^1.1.0" } }, "sha512-mV9M4Llh4va3NT90p7KBtQhoZqjs8xLX7EWYE4y/GG3yLF6REbIBEHSUb0UX1JXRht2w5tiLSsvmpYc5akiqIw=="],
 
-    "jose": ["jose@6.2.13", "", {}, "sha512-7TIg10ZE1x82YediN+lcrPNvGMKge9yFHQD+Qho/b8y2adfugU3AsvvHfxV0fzyFllT6l9xCjf4RWY9g/Z9PJQ=="],
+    "jose": ["jose@6.2.14", "", {}, "sha512-3JasLuki1NRLQvY4wCoC37KZk4qxoBx2k2aFqLxT84IezqW0bkJKnNtxnZj/Fu1xsQivoc/lytxaRHJoGLjJ1A=="],
 
     "lodash": ["lodash@4.17.21", "", {}, "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="],
 
