@@ -6,7 +6,7 @@
       "name": "motortg-crud",
       "dependencies": {
         "@socket.io/postgres-adapter": "^0.5.0",
-        "joi": "^18.3.0",
+        "joi": "^18.3.1",
         "jose": "^6.2.13",
         "pg": "^8.23.1",
         "sequelize": "^6.37.8",
@@ -73,7 +73,7 @@
 
     "inflection": ["inflection@1.13.4", "", {}, "sha512-6I/HUDeYFfuNCVS3td055BaXBwKYuzw7K3ExVMStBowKo9oOAMJIXIHvdyR3iboTCp1b+1i5DSkIZTcwIktuDw=="],
 
-    "joi": ["joi@18.3.0", "", { "dependencies": { "@hapi/address": "^5.1.1", "@hapi/formula": "^3.0.2", "@hapi/hoek": "^11.0.7", "@hapi/pinpoint": "^2.0.1", "@hapi/tlds": "^1.1.1", "@hapi/topo": "^6.0.2", "@standard-schema/spec": "^1.1.0" } }, "sha512-/RwAK4BAfzcdbdFg073tzq4/xhY6Q7lMd5AmjqTL6pu0QFJdEmtswgm8BvgwXvOKuPNYQ8XrdQrrW/gF65LiNw=="],
+    "joi": ["joi@18.3.1", "", { "dependencies": { "@hapi/address": "^5.1.1", "@hapi/formula": "^3.0.2", "@hapi/hoek": "^11.0.7", "@hapi/pinpoint": "^2.0.1", "@hapi/tlds": "^1.1.1", "@hapi/topo": "^6.0.2", "@standard-schema/spec": "^1.1.0" } }, "sha512-mV9M4Llh4va3NT90p7KBtQhoZqjs8xLX7EWYE4y/GG3yLF6REbIBEHSUb0UX1JXRht2w5tiLSsvmpYc5akiqIw=="],
 
     "jose": ["jose@6.2.13", "", {}, "sha512-7TIg10ZE1x82YediN+lcrPNvGMKge9yFHQD+Qho/b8y2adfugU3AsvvHfxV0fzyFllT6l9xCjf4RWY9g/Z9PJQ=="],
 
